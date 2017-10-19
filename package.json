@@ -1,23 +1,23 @@
 {
 	"name": "api-opus-session-exporter",
 	"version": "1.0.0",
-	"description": "An express server serving a react app for exporting Opus session data.",
+	"description":
+		"An express server serving a react app for exporting Opus session data.",
 	"main": "index.js",
 	"scripts": {
 		"start": "node server.js",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test":
+			"webpack-dev-server --config ./webpack.dev.js --inline --hot --port 3002",
+		"watch":
+			"rimraf public && webpack --config ./webpack.dev.js --progress --profile --colors --watch",
+		"build":
+			"rimraf public && webpack --config ./webpack.production.js --progress --profile --colors"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/C-Rodg/Opus-Session-Exporter.git"
 	},
-	"keywords": [
-		"express",
-		"opus",
-		"react",
-		"export",
-		"csv"
-	],
+	"keywords": ["express", "opus", "react", "export", "csv"],
 	"author": "C-Rodg",
 	"license": "MIT",
 	"bugs": {
