@@ -1,0 +1,26 @@
+{
+  "name": "api-opus-session-exporter",
+  "version": "1.0.0",
+  "description": "An express server serving a react app for exporting Opus session data.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/C-Rodg/Opus-Session-Exporter.git"
+  },
+  "keywords": [
+    "express",
+    "opus",
+    "react",
+    "export",
+    "csv"
+  ],
+  "author": "C-Rodg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/C-Rodg/Opus-Session-Exporter/issues"
+  },
+  "homepage": "https://github.com/C-Rodg/Opus-Session-Exporter#readme"
+}
