@@ -14,7 +14,8 @@ module.exports = {
 	},
 	output: {
 		path: path.resolve(__dirname, "public"),
-		filename: "[name].bundle.js"
+		filename: "[name].bundle.js",
+		publicPath: "/"
 	},
 	module: {
 		rules: [
@@ -95,7 +96,8 @@ module.exports = {
 		new ExtractTextPlugin({
 			filename: "[name].css?[hash]",
 			disable: false,
-			allChunks: true
+			allChunks: true,
+			publicPath: "/"
 		}),
 		new webpack.optimize.CommonsChunkPlugin({
 			name: "vendor"
@@ -106,7 +108,8 @@ module.exports = {
 			env: true,
 			filename: "./index.html",
 			chunks: ["vendor", "app"],
-			favicon: "./app/static/favicon.ico"
+			favicon: "./app/static/favicon.ico",
+			publicPath: "/"
 		}),
 		new UglifyJsPlugin({
 			beautify: false,

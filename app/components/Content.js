@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import AlertContainer from "react-alert";
+import axios from "axios";
+const FileDownload = require("js-file-download");
 
 import { getQueryParams } from "../utils/queryParameters";
 
@@ -46,7 +48,6 @@ class Content extends Component {
 		}
 
 		if (hasValue) {
-			console.log(obj);
 			this.setState(obj);
 		}
 	}
@@ -57,7 +58,29 @@ class Content extends Component {
 		if (!clientGuid || !eventId || !username || !password) {
 			this.msg.error("Please fill out all credential fields..");
 		} else {
-			this.msg.success("Successfully got Validar CSV");
+			this.setState({ loading: true }, () => {
+				const data = {
+					clientGuid,
+					eventId,
+					username,
+					password,
+					validarCSV: true
+				};
+				let d = new Date();
+				const fileName = `Validar_${d.getFullYear()}_${d.getMonth() +
+					1}_${d.getDate()}_${d.getHours()}.csv`;
+				axios
+					.post("/opus/getSessions", data)
+					.then(resp => {
+						console.log(resp);
+						FileDownload(resp.data, fileName);
+						this.msg.success("Validar session list downloaded!");
+					})
+					.catch(err => {
+						console.log(err);
+						this.msg.error("There was an issue getting the session list..");
+					});
+			});
 		}
 	};
 
@@ -67,7 +90,30 @@ class Content extends Component {
 		if (!clientGuid || !eventId || !username || !password) {
 			this.msg.error("Please fill out all credential fields..");
 		} else {
-			this.msg.success("Successfully got Full session data");
+			this.setState({ loading: true }, () => {
+				const data = {
+					clientGuid,
+					eventId,
+					username,
+					password,
+					validarCSV: false
+				};
+				const d = new Date();
+				const fileName = `FullSessions_${d.getFullYear()}_${d.getMonth() +
+					1}_${d.getDate()}_${d.getHours()}.csv`;
+				axios
+					.post("/opus/getSessions", data)
+					.then(resp => {
+						FileDownload(resp.data, fileName);
+						this.setState({ loading: false });
+						this.msg.success("Full session list downloaded!");
+					})
+					.catch(err => {
+						console.log(err);
+						this.setState({ loading: false });
+						this.msg.error("There was an issue getting the session list..");
+					});
+			});
 		}
 	};
 
