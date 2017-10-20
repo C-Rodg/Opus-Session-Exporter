@@ -35,25 +35,20 @@ module.exports = {
 					use: [
 						{
 							loader: "css-loader",
-							use: [
-								{
-									loader: "css-loader",
-									options: { sourceMap: true }
+							options: { sourceMap: true }
+						},
+						{
+							loader: "postcss-loader",
+							options: {
+								plugins: function() {
+									return [require("autoprefixer")];
 								},
-								{
-									loader: "postcss-loader",
-									options: {
-										plugins: function() {
-											return [require("autoprefixer")];
-										},
-										sourceMap: true
-									}
-								},
-								{
-									loader: "sass-loader",
-									options: { sourceMap: true }
-								}
-							]
+								sourceMap: true
+							}
+						},
+						{
+							loader: "sass-loader",
+							options: { sourceMap: true }
 						}
 					]
 				})
