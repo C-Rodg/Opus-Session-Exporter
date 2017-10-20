@@ -12,7 +12,7 @@ import Loading from "./Loading";
 const alertOptions = {
 	position: "top right",
 	theme: "dark",
-	time: 4000,
+	time: 0,
 	offset: 7
 };
 
@@ -67,7 +67,7 @@ class Content extends Component {
 					validarCSV: true
 				};
 				let d = new Date();
-				const fileName = `Validar_${d.getFullYear()}_${d.getMonth() +
+				const fileName = `ValidarSessions_${d.getFullYear()}_${d.getMonth() +
 					1}_${d.getDate()}_${d.getHours()}.csv`;
 				axios
 					.post("/opus/getSessions", data)
@@ -75,10 +75,12 @@ class Content extends Component {
 						console.log(resp);
 						FileDownload(resp.data, fileName);
 						this.msg.success("Validar session list downloaded!");
+						this.setState({ loading: false });
 					})
 					.catch(err => {
 						console.log(err);
 						this.msg.error("There was an issue getting the session list..");
+						this.setState({ loading: false });
 					});
 			});
 		}

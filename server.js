@@ -3,7 +3,9 @@ const app = express(),
 	path = require("path"),
 	bodyParser = require("body-parser"),
 	axios = require("axios"),
-	json2csv = require("json2csv");
+	json2csv = require("json2csv"),
+	moment = require("moment"),
+	VALIDAR_CSV_MAP = require("./csvConfig");
 
 // Configure Express middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -41,7 +43,7 @@ app.post("/opus/getSessions", (clientRequest, clientResponse) => {
 		}
 	})
 		.then(opusResponse => {
-			// TODO: Check for next_page_link
+			// TODO: Check for next_page_link -
 
 			// If there are results parse and send
 			if (
@@ -55,10 +57,16 @@ app.post("/opus/getSessions", (clientRequest, clientResponse) => {
 					csvData = "";
 
 				if (validarCSV) {
-					// TODO: PARSE INTO VALIDAR FORMAT
+					fields = VALIDAR_CSV_MAP;
+					const convertedSessions = result.map(convertToValidarObj);
+					csvData = json2csv({
+						data: convertedSessions,
+						fields,
+						withBOM: true
+					});
 				} else {
 					fields = Object.keys(result[0]);
-					csvData = json2csv({ data: result, fields });
+					csvData = json2csv({ data: result, fields, withBOM: true });
 					fileName = "fullSessionData.csv";
 				}
 
@@ -83,3 +91,19 @@ app.post("/opus/getSessions", (clientRequest, clientResponse) => {
 app.listen(3001, () => {
 	console.log("Opus Session Exporter now listening on port 3001...");
 });
+
+// Convert start/end dates to 4 columns
+function convertToValidarObj(result) {
+	const obj = Object.assign({}, result);
+	const start = moment(result.session_start_date_time, "YYYY-MM-DDTHH:mm:ss");
+	const end = moment(result.session_end_date_time, "YYYY-MM-DDTHH:mm:ss");
+	if (start.isValid()) {
+		obj.added_start_date = start.format("MM/DD/YYYY");
+		obj.added_start_time = start.format("H:mm");
+	}
+	if (end.isValid()) {
+		obj.added_end_date = end.format("MM/DD/YYYY");
+		obj.added_end_time = end.format("H:mm");
+	}
+	return obj;
+}
