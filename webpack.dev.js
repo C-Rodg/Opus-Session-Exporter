@@ -25,7 +25,7 @@ module.exports = {
 				loader: "babel-loader",
 				exclude: /node_modules/,
 				options: {
-					presets: ["react", "es2015", "stage-0"]
+					presets: ["env", "react", "stage-0"]
 				}
 			},
 			{
@@ -108,13 +108,13 @@ module.exports = {
 			chunks: ["vendor", "app"],
 			favicon: "./app/static/favicon.ico"
 		}),
-		new UglifyJsPlugin({
-			beautify: true,
-			mangle: { screw_ie8: true, warnings: false },
-			compress: { screw_ie8: true, warnings: false },
-			comments: true,
-			sourceMap: true
-		}),
+		// new UglifyJsPlugin({
+		// 	beautify: true,
+		// 	mangle: { screw_ie8: true, warnings: false },
+		// 	compress: { screw_ie8: true, warnings: false },
+		// 	comments: true,
+		// 	sourceMap: true
+		// }),
 		new BundleAnalyzerPlugin()
 	],
 	devServer: {
