@@ -1,4 +1,4 @@
-@font-face {
+/* @font-face {
 	font-family: "Raleway";
 	src: url("./fonts/raleway/raleway-thin.eot");
 	src: url("./fonts/raleway/raleway-thin.eot?#iefix")
@@ -20,7 +20,7 @@
 			format("svg");
 	font-weight: 200;
 	font-style: normal;
-}
+} */
 @font-face {
 	font-family: "Raleway";
 	src: url("./fonts/raleway/raleway-light.eot");
@@ -54,7 +54,7 @@
 	font-weight: 500;
 	font-style: normal;
 }
-@font-face {
+/* @font-face {
 	font-family: "Raleway";
 	src: url("./fonts/raleway/raleway-semibold.eot");
 	src: url("./fonts/raleway/raleway-semibold.eot?#iefix")
@@ -97,4 +97,4 @@
 		url("./fonts/raleway/raleway-heavy.svg#ralewayheavy") format("svg");
 	font-weight: 900;
 	font-style: normal;
-}
+} */
