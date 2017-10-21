@@ -18,6 +18,38 @@
 		padding: 10px;
 	}
 
+	.date-box {
+		> div {
+			display: inline-block;
+
+			.react-datepicker__input-container {
+				input {
+					border: 1px solid #c5c5c5;
+					border-radius: 2px;
+					font-size: 1.1rem;
+					padding: 3px 4px;
+				}
+			}
+		}
+
+		label {
+			font-size: 1.1rem;
+			margin-right: 20px;
+			color: #757575;
+		}
+
+		.react-datepicker__close-icon::after {
+			background-color: #368678;
+			opacity: 0.75;
+		}
+
+		.react-datepicker__time-box {
+			ul.react-datepicker__time-list {
+				padding: 0 !important;
+			}
+		}
+	}
+
 	.card-actions {
 		display: flex;
 		text-transform: uppercase;

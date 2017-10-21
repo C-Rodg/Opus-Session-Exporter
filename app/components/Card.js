@@ -2,6 +2,8 @@ import React from "react";
 import "../styles/card.scss";
 
 import TextInput from "./TextInput";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Card = ({
 	clientGuid,
@@ -10,7 +12,9 @@ const Card = ({
 	password,
 	onGetValidarCSV,
 	onGetFullSessionData,
-	onInputUpdate
+	onInputUpdate,
+	filterDate,
+	onDateChange
 }) => {
 	return (
 		<div className="card">
@@ -42,6 +46,18 @@ const Card = ({
 						label="Password"
 						type="password"
 					/>
+					<div className="date-box">
+						<label>Pull Sessions Updated From:</label>
+						<DatePicker
+							placeholderText="All of the Sessions!"
+							dateFormat="MMM DD, YYYY, HH:mm"
+							timeFormat="HH:mm"
+							isClearable={true}
+							selected={filterDate}
+							onChange={onDateChange}
+							showTimeSelect
+						/>
+					</div>
 				</div>
 				<div className="card-actions">
 					<div className="action action-full" onClick={onGetFullSessionData}>

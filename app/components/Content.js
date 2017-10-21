@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import AlertContainer from "react-alert";
 import axios from "axios";
 const FileDownload = require("js-file-download");
+import moment from "moment";
 
 import { getQueryParams } from "../utils/queryParameters";
 
@@ -22,12 +23,14 @@ class Content extends Component {
 		eventId: "",
 		username: "",
 		password: "",
+		filterDate: "",
 		loading: false
 	};
 
 	componentDidMount() {
 		// Parse out query parameters
 		const q = getQueryParams();
+		let lastModified = "";
 		let hasValue = false;
 		const obj = {};
 		if (q.hasOwnProperty("clientguid")) {
@@ -37,6 +40,7 @@ class Content extends Component {
 		if (q.hasOwnProperty("eventid")) {
 			hasValue = true;
 			obj.eventId = q["eventid"];
+			lastModified = window.localStorage.getItem(`${obj.eventId}_lastModified`);
 		}
 		if (q.hasOwnProperty("username")) {
 			hasValue = true;
@@ -47,6 +51,10 @@ class Content extends Component {
 			obj.password = q["password"];
 		}
 
+		if (lastModified) {
+			obj.filterDate = moment(lastModified, "YYYY-MM-DD HH:mm");
+		}
+
 		if (hasValue) {
 			this.setState(obj);
 		}
@@ -54,7 +62,7 @@ class Content extends Component {
 
 	// Get parsed session data in validar format
 	handleGetValidarCSV = () => {
-		const { clientGuid, eventId, username, password } = this.state;
+		const { clientGuid, eventId, username, password, filterDate } = this.state;
 		if (!clientGuid || !eventId || !username || !password) {
 			this.msg.error("Please fill out all credential fields..");
 		} else {
@@ -66,14 +74,20 @@ class Content extends Component {
 					password,
 					validarCSV: true
 				};
+				if (filterDate) {
+					data.filter = `modified_date_time > ${filterDate.format(
+						"MM/DD/YYYY HH:mm:ss"
+					)}`;
+				}
 				let d = new Date();
 				const fileName = `ValidarSessions_${d.getFullYear()}_${d.getMonth() +
-					1}_${d.getDate()}_${d.getHours()}.csv`;
+					1}_${d.getDate()}_${d.getHours()}_${d.getMinutes()}.csv`;
 				axios
 					.post("/opus/getSessions", data)
 					.then(resp => {
-						console.log(resp);
 						FileDownload(resp.data, fileName);
+						const now = moment().format("YYYY-MM-DD HH:mm");
+						window.localStorage.setItem(`${eventId}_lastModified`, now);
 						this.msg.success("Validar session list downloaded!");
 						this.setState({ loading: false });
 					})
@@ -88,7 +102,7 @@ class Content extends Component {
 
 	// Make API request for full session data
 	handleGetFullSessionData = () => {
-		const { clientGuid, eventId, username, password } = this.state;
+		const { clientGuid, eventId, username, password, filterDate } = this.state;
 		if (!clientGuid || !eventId || !username || !password) {
 			this.msg.error("Please fill out all credential fields..");
 		} else {
@@ -100,13 +114,20 @@ class Content extends Component {
 					password,
 					validarCSV: false
 				};
+				if (filterDate) {
+					data.filter = `modified_date_time > ${filterDate.format(
+						"MM/DD/YYYY HH:mm:ss"
+					)}`;
+				}
 				const d = new Date();
 				const fileName = `FullSessions_${d.getFullYear()}_${d.getMonth() +
-					1}_${d.getDate()}_${d.getHours()}.csv`;
+					1}_${d.getDate()}_${d.getHours()}_${d.getMinutes()}.csv`;
 				axios
 					.post("/opus/getSessions", data)
 					.then(resp => {
 						FileDownload(resp.data, fileName);
+						const now = moment().format("YYYY-MM-DD HH:mm");
+						window.localStorage.setItem(`${eventId}_lastModified`, now);
 						this.setState({ loading: false });
 						this.msg.success("Full session list downloaded!");
 					})
@@ -124,6 +145,13 @@ class Content extends Component {
 		this.setState({ [tag]: ev.target.value });
 	};
 
+	// Handle Filter date change
+	handleDateChange = date => {
+		this.setState({
+			filterDate: date
+		});
+	};
+
 	render() {
 		return (
 			<div className="content">
@@ -137,6 +165,8 @@ class Content extends Component {
 						onGetValidarCSV={this.handleGetValidarCSV}
 						onGetFullSessionData={this.handleGetFullSessionData}
 						onInputUpdate={this.handleInputUpdate}
+						onDateChange={this.handleDateChange}
+						filterDate={this.state.filterDate}
 					/>
 				) : (
 					<Loading width={210} height={210} />

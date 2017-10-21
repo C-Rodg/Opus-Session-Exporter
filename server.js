@@ -23,12 +23,16 @@ app.post("/opus/getSessions", (clientRequest, clientResponse) => {
 		eventId,
 		username,
 		password,
-		validarCSV
+		validarCSV,
+		filter
 	} = clientRequest.body;
 	const data = {
 		clientGUID: clientGuid,
 		event_id: eventId
 	};
+	if (filter) {
+		data.filter = filter;
+	}
 	axios({
 		method: "post",
 		url: "https://api.opus.agency/api/1.4/getEventSessions",

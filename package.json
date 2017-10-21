@@ -59,6 +59,7 @@
 		"moment": "^2.19.1",
 		"react": "^16.0.0",
 		"react-alert": "^2.4.0",
+		"react-datepicker": "^0.56.0",
 		"react-dom": "^16.0.0"
 	}
 }
